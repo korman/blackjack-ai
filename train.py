@@ -3,117 +3,117 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import torch
-from tqdm import tqdm  # 用于显示进度条
+from tqdm import tqdm  # For displaying progress bars
 from blackjack_env import BlackjackEnv
 from dqn_agent import DQNAgent
 
-# 确保模型目录存在
+# Ensure models directory exists
 os.makedirs('models', exist_ok=True)
 
 
 def train_agent(num_episodes=50000, save_frequency=5000):
     """
-    训练智能体玩21点
+    Train the agent to play Blackjack
 
-    参数:
-        num_episodes: 训练总回合数
-        save_frequency: 保存模型的频率
+    Parameters:
+        num_episodes: Total training episodes
+        save_frequency: Frequency for saving the model
 
-    返回:
-        agent: 训练好的智能体
-        rewards: 每回合的奖励列表
-        epsilons: 每回合的探索率列表
+    Returns:
+        agent: Trained agent
+        rewards: List of rewards for each episode
+        epsilons: List of exploration rates for each episode
     """
-    print("开始训练DQN智能体...")
+    print("Starting DQN Agent training...")
 
-    # 设置环境和智能体
+    # Set up environment and agent
     env = BlackjackEnv()
-    state_size = 15  # 2 (玩家状态) + 13 (可见牌的计数)
+    state_size = 15  # 2 (player state) + 13 (visible card count)
     action_size = 2  # 0: hit, 1: stand
     agent = DQNAgent(state_size, action_size)
 
-    # 训练统计
+    # Training statistics
     rewards = []
     epsilons = []
 
-    # 使用tqdm显示训练进度
-    progress_bar = tqdm(range(num_episodes), desc="训练进度")
+    # Use tqdm to display training progress
+    progress_bar = tqdm(range(num_episodes), desc="Training Progress")
 
-    # 开始训练
+    # Start training
     for episode in progress_bar:
         state = env.reset()
         total_reward = 0
         done = False
 
         while not done:
-            # 选择动作
+            # Choose action
             action = agent.act(state)
 
-            # 执行动作
+            # Execute action
             next_state, reward, done, _ = env.step(action)
 
-            # 存储经验
+            # Store experience
             agent.remember(state, action, reward, next_state, done)
 
-            # 经验回放
+            # Experience replay
             agent.replay()
 
-            # 更新状态和奖励
+            # Update state and reward
             state = next_state
             total_reward += reward
 
-        # 记录统计数据
+        # Record statistics
         rewards.append(total_reward)
         epsilons.append(agent.epsilon)
 
-        # 更新进度条信息
+        # Update progress bar information
         if episode > 0 and episode % 100 == 0:
             avg_reward = np.mean(rewards[-100:])
             progress_bar.set_postfix({
-                "平均奖励(最近100局)": f"{avg_reward:.4f}",
-                "探索率": f"{agent.epsilon:.4f}"
+                "Avg Reward (Last 100)": f"{avg_reward:.4f}",
+                "Epsilon": f"{agent.epsilon:.4f}"
             })
 
-        # 定期保存模型
+        # Save model periodically
         if (episode + 1) % save_frequency == 0:
             save_path = f"models/blackjack_dqn_episode_{episode+1}.pth"
             agent.save(save_path)
-            print(f"\n模型已保存到 {save_path}")
+            print(f"\nModel saved to {save_path}")
 
-    # 保存最终模型
+    # Save final model
     final_path = "models/blackjack_dqn_final.pth"
     agent.save(final_path)
-    print(f"最终模型已保存到 {final_path}")
+    print(f"Final model saved to {final_path}")
 
     return agent, rewards, epsilons
 
 
 def evaluate_agent(agent, num_episodes=1000):
     """
-    评估训练好的智能体的性能
+    Evaluate the performance of the trained agent
 
-    参数:
-        agent: 要评估的智能体
-        num_episodes: 评估的游戏回合数
+    Parameters:
+        agent: Agent to evaluate
+        num_episodes: Number of game episodes for evaluation
 
-    返回:
-        win_rate: 胜率
-        draw_rate: 平局率
-        loss_rate: 负率
+    Returns:
+        win_rate: Win rate
+        draw_rate: Draw rate
+        loss_rate: Loss rate
     """
-    print(f"\n评估智能体性能 (进行 {num_episodes} 局游戏)...")
+    print(f"\nEvaluating agent performance (playing {num_episodes} games)...")
     env = BlackjackEnv()
     wins = 0
     draws = 0
     losses = 0
 
-    # 使用tqdm显示评估进度
-    for episode in tqdm(range(num_episodes), desc="评估进度"):
+    # Use tqdm to display evaluation progress
+    for episode in tqdm(range(num_episodes), desc="Evaluation Progress"):
         state = env.reset()
         done = False
 
         while not done:
-            action = agent.act(state, training=False)  # 不使用探索
+            action = agent.act(state, training=False)  # No exploration
             state, reward, done, _ = env.step(action)
 
         if reward == 1:
@@ -127,95 +127,97 @@ def evaluate_agent(agent, num_episodes=1000):
     draw_rate = draws / num_episodes
     loss_rate = losses / num_episodes
 
-    print("\n评估结果:")
-    print(f"胜率: {win_rate:.4f} ({wins}/{num_episodes})")
-    print(f"平局率: {draw_rate:.4f} ({draws}/{num_episodes})")
-    print(f"负率: {loss_rate:.4f} ({losses}/{num_episodes})")
+    print("\nEvaluation Results:")
+    print(f"Win Rate: {win_rate:.4f} ({wins}/{num_episodes})")
+    print(f"Draw Rate: {draw_rate:.4f} ({draws}/{num_episodes})")
+    print(f"Loss Rate: {loss_rate:.4f} ({losses}/{num_episodes})")
 
     return win_rate, draw_rate, loss_rate
 
 
 def plot_training_results(rewards, epsilons, window_size=1000):
     """
-    绘制训练过程的结果
+    Plot the training results
 
-    参数:
-        rewards: 每回合的奖励列表
-        epsilons: 每回合的探索率列表
-        window_size: 滑动窗口大小，用于平滑奖励曲线
+    Parameters:
+        rewards: List of rewards for each episode
+        epsilons: List of exploration rates for each episode
+        window_size: Sliding window size for smoothing the reward curve
     """
-    print("\n绘制训练结果...")
+    print("\nPlotting training results...")
     plt.figure(figsize=(12, 10))
 
-    # 绘制平滑后的奖励曲线
+    # Plot smoothed reward curve
     plt.subplot(3, 1, 1)
 
-    # 确保窗口大小不超过奖励列表长度
+    # Ensure window size doesn't exceed the length of rewards
     window_size = min(window_size, len(rewards))
 
-    # 计算滑动平均
+    # Calculate moving average
     smoothed_rewards = []
     for i in range(len(rewards) - window_size + 1):
         smoothed_rewards.append(np.mean(rewards[i:i+window_size]))
 
     plt.plot(range(window_size, len(rewards) + 1), smoothed_rewards)
-    plt.title(f'平均奖励 (滑动窗口大小 = {window_size})')
-    plt.xlabel('训练回合')
-    plt.ylabel('平均奖励')
+    plt.title(f'Average Reward (Window Size = {window_size})')
+    plt.xlabel('Training Episodes')
+    plt.ylabel('Average Reward')
     plt.grid(True, linestyle='--', alpha=0.7)
 
-    # 绘制原始奖励曲线
+    # Plot raw reward curve
     plt.subplot(3, 1, 2)
     plt.plot(rewards)
-    plt.title('每回合奖励')
-    plt.xlabel('训练回合')
-    plt.ylabel('奖励')
+    plt.title('Episode Rewards')
+    plt.xlabel('Training Episodes')
+    plt.ylabel('Reward')
     plt.grid(True, linestyle='--', alpha=0.7)
 
-    # 绘制探索率衰减曲线
+    # Plot epsilon decay curve
     plt.subplot(3, 1, 3)
     plt.plot(epsilons)
-    plt.title('探索率(Epsilon)衰减')
-    plt.xlabel('训练回合')
+    plt.title('Exploration Rate (Epsilon) Decay')
+    plt.xlabel('Training Episodes')
     plt.ylabel('Epsilon')
     plt.grid(True, linestyle='--', alpha=0.7)
 
     plt.tight_layout()
     plt.savefig('blackjack_training_results.png', dpi=300)
-    print("图表已保存到 'blackjack_training_results.png'")
+    print("Chart saved to 'blackjack_training_results.png'")
     plt.show()
 
 
 def train_and_evaluate(train_episodes=50000, eval_episodes=1000):
     """
-    训练并评估智能体的完整流程
+    Complete workflow for training and evaluating the agent
 
-    参数:
-        train_episodes: 训练的总回合数
-        eval_episodes: 评估的回合数
+    Parameters:
+        train_episodes: Total number of training episodes
+        eval_episodes: Number of evaluation episodes
     """
-    # 训练智能体
+    # Train the agent
     trained_agent, rewards, epsilons = train_agent(num_episodes=train_episodes)
 
-    # 评估智能体
+    # Evaluate the agent
     evaluate_agent(trained_agent, num_episodes=eval_episodes)
 
-    # 绘制训练结果
+    # Plot training results
     plot_training_results(rewards, epsilons)
 
-    print("\n训练和评估完成！模型已保存到 models/ 目录。")
-    print("你可以运行 play_with_ai.py 与训练好的AI对战。")
+    print("\nTraining and evaluation complete! Model saved to models/ directory.")
+    print("You can run play_with_ai.py to play against the trained AI.")
 
 
 if __name__ == "__main__":
     import argparse
 
-    # 命令行参数解析
-    parser = argparse.ArgumentParser(description='训练21点AI智能体')
-    parser.add_argument('--episodes', type=int, default=50000, help='训练的回合数')
-    parser.add_argument('--eval', type=int, default=1000, help='评估的回合数')
+    # Command line argument parsing
+    parser = argparse.ArgumentParser(description='Train Blackjack AI Agent')
+    parser.add_argument('--episodes', type=int, default=50000,
+                        help='Number of training episodes')
+    parser.add_argument('--eval', type=int, default=1000,
+                        help='Number of evaluation episodes')
 
     args = parser.parse_args()
 
-    # 训练并评估
+    # Train and evaluate
     train_and_evaluate(train_episodes=args.episodes, eval_episodes=args.eval)
