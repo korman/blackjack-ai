@@ -1,6 +1,6 @@
 # Blackjack AI
 
-[简体中文](chrome-extension://dhoenijjpgpeimemopealfcbiecgceod/README_zhCN.md) | English
+[简体中文](https://github.com/korman/blackjack-ai/README_zhCN.md) | English
 
 An AI project for Blackjack based on deep reinforcement learning, using Deep Q-Networks (DQN) to train agents that learn optimal game strategies.
 
@@ -98,7 +98,7 @@ Standard Blackjack rules:
 
 ## License
 
-[MIT License](chrome-extension://dhoenijjpgpeimemopealfcbiecgceod/LICENSE)
+[MIT License](https://github.com/korman/blackjack-ai/LICENSE)
 
 ------
 
