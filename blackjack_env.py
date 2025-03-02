@@ -172,7 +172,6 @@ class BlackjackEnv:
 
             if all_opponents_busted:  # 所有对手都爆牌
                 self.reward = 1
-                print("DEBUG: 所有对手爆牌，玩家胜利")
             else:
                 # 获取没爆牌的对手的最大点数
                 valid_opponents = [
