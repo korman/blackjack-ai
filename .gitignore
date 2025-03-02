@@ -1,0 +1,49 @@
+# 缓存文件
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 分发/打包
+dist/
+build/
+*.egg-info/
+
+# 虚拟环境
+venv/
+env/
+.env/
+.venv/
+
+# 编辑器/IDE文件
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 本地配置
+config.local.py
+.env
+
+# 训练生成的模型文件 - 选择性忽略
+models/*.pth
+models/*.pt
+models/*.ckpt
+# 但保留models目录本身及README
+!models/.gitkeep
+
+# 图片文件 - 确定是否真的需要忽略所有PNG
+# 如果只想忽略生成的图表，可以更具体：
+results/plots/*.png
+# 或者保留README等文档用的图片：
+!docs/images/*.png
