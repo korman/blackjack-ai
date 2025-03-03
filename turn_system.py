@@ -1,15 +1,18 @@
 import esper
 import random
-from dataclasses import dataclass;
+from dataclasses import dataclass
+
 
 # 系统实现
 @dataclass
 class PlayOrder:  # 存储玩家实体ID的出牌顺序
     order: list[int]
 
+
 @dataclass
 class CurrentPlayer:  # 标记当前回合玩家
     index: int = 0
+
 
 class TurnSystem(esper.Processor):
     def process(self):

@@ -3,10 +3,23 @@ import time
 from typing import List, Optional
 
 # 定义牌的花色和点数
-SUITS = ['♠', '♥', '♦', '♣']
-RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-VALUES = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8,
-          '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11}
+SUITS = ["♠", "♥", "♦", "♣"]
+RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
+VALUES = {
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "10": 10,
+    "J": 10,
+    "Q": 10,
+    "K": 10,
+    "A": 11,
+}
 
 
 class Card:
@@ -51,7 +64,7 @@ class Player:
     def calculate_hand_value(self) -> int:
         value = sum(card.value for card in self.hand)
         # 处理A的特殊情况
-        num_aces = sum(1 for card in self.hand if card.rank == 'A')
+        num_aces = sum(1 for card in self.hand if card.rank == "A")
         # 如果有A且总点数超过21，将A的值从11改为1
         while value > 21 and num_aces:
             value -= 10
@@ -62,18 +75,19 @@ class Player:
         if self.is_ai:
             # AI策略：小于17要牌，否则停牌
             if self.calculate_hand_value() < 17:
-                return 'hit'
+                return "hit"
             else:
-                return 'stand'
+                return "stand"
         else:
             # 人类玩家通过输入决定
             while True:
                 action = input(
-                    f"{self.name}, 你的手牌是 {self.show_hand()}, 点数是 {self.calculate_hand_value()}. 要牌(h)还是停牌(s)? ").lower()
-                if action in ['h', 'hit']:
-                    return 'hit'
-                elif action in ['s', 'stand']:
-                    return 'stand'
+                    f"{self.name}, 你的手牌是 {self.show_hand()}, 点数是 {self.calculate_hand_value()}. 要牌(h)还是停牌(s)? "
+                ).lower()
+                if action in ["h", "hit"]:
+                    return "hit"
+                elif action in ["s", "stand"]:
+                    return "stand"
                 else:
                     print("无效的输入，请输入 'h' 要牌或 's' 停牌。")
 
@@ -106,21 +120,25 @@ class BlackjackGame:
                 print(f"\n{player.name}的回合:")
                 if player.is_ai:
                     print(
-                        f"{player.name}的手牌是 {player.show_hand()}, 点数是 {player.calculate_hand_value()}")
+                        f"{player.name}的手牌是 {player.show_hand()}, 点数是 {player.calculate_hand_value()}"
+                    )
                     time.sleep(1)  # 添加一点延迟，使游戏流程更易于跟踪
 
                 action = player.decide_action()
 
-                if action == 'hit':
+                if action == "hit":
                     card = self.deck.deal()
                     player.add_card(card)
                     print(f"{player.name} 要了一张牌: {card}")
                     if player.is_busted:
                         print(
-                            f"{player.name} 爆牌了! 点数: {player.calculate_hand_value()}")
+                            f"{player.name} 爆牌了! 点数: {player.calculate_hand_value()}"
+                        )
                 else:  # stand
                     player.is_standing = True
-                    print(f"{player.name} 选择停牌。点数: {player.calculate_hand_value()}")
+                    print(
+                        f"{player.name} 选择停牌。点数: {player.calculate_hand_value()}"
+                    )
 
             # 检查游戏是否结束
             if all(player.is_standing for player in self.players):
@@ -135,7 +153,8 @@ class BlackjackGame:
         for player in self.players:
             status = "爆牌" if player.is_busted else "有效"
             print(
-                f"{player.name}: {player.show_hand()} - 点数: {player.calculate_hand_value()} ({status})")
+                f"{player.name}: {player.show_hand()} - 点数: {player.calculate_hand_value()} ({status})"
+            )
 
         # 找出没有爆牌的玩家
         valid_players = [p for p in self.players if not p.is_busted]
@@ -146,8 +165,7 @@ class BlackjackGame:
 
         # 找出点数最高的玩家
         max_value = max(p.calculate_hand_value() for p in valid_players)
-        winners = [p for p in valid_players if p.calculate_hand_value()
-                   == max_value]
+        winners = [p for p in valid_players if p.calculate_hand_value() == max_value]
 
         if len(winners) == 1:
             print(f"\n赢家是 {winners[0].name}，点数: {max_value}")
@@ -165,7 +183,7 @@ def play_blackjack():
         game.start_game()
 
         play_again = input("\n想再玩一局吗? (y/n): ").lower()
-        if play_again != 'y':
+        if play_again != "y":
             print("谢谢游玩，再见!")
             break
 

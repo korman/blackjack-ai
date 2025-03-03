@@ -3,8 +3,9 @@ import numpy as np
 from blackjack_game import Deck, Player, Card
 
 
-def encode_state(player_hand_value: int, player_has_usable_ace: bool,
-                 visible_cards: list) -> np.ndarray:
+def encode_state(
+    player_hand_value: int, player_has_usable_ace: bool, visible_cards: list
+) -> np.ndarray:
     """
     将游戏状态编码为神经网络的输入。
 
@@ -19,17 +20,17 @@ def encode_state(player_hand_value: int, player_has_usable_ace: bool,
     # 编码玩家自己的状态
     state = [
         player_hand_value / 21.0,  # 归一化手牌点数
-        1.0 if player_has_usable_ace else 0.0
+        1.0 if player_has_usable_ace else 0.0,
     ]
 
     # 编码已知牌的分布（牌计数）
     card_counts = [0] * 13  # 2-10, J, Q, K, A
     for card in visible_cards:
-        if card.rank == 'A':
+        if card.rank == "A":
             card_counts[12] += 1
-        elif card.rank in ['J', 'Q', 'K']:
+        elif card.rank in ["J", "Q", "K"]:
             card_counts[9] += 1  # 10点牌统一计数
-        elif card.rank == '10':
+        elif card.rank == "10":
             card_counts[8] += 1
         else:
             card_counts[int(card.rank) - 2] += 1
@@ -38,13 +39,13 @@ def encode_state(player_hand_value: int, player_has_usable_ace: bool,
     num_decks = 1  # 假设使用1副牌
     for i in range(len(card_counts)):
         if i == 9:  # 10点牌(J,Q,K)有12张
-            card_counts[i] /= (12 * num_decks)
+            card_counts[i] /= 12 * num_decks
         elif i == 8:  # 10有4张
-            card_counts[i] /= (4 * num_decks)
+            card_counts[i] /= 4 * num_decks
         elif i == 12:  # A有4张
-            card_counts[i] /= (4 * num_decks)
+            card_counts[i] /= 4 * num_decks
         else:  # 其他每种牌有4张
-            card_counts[i] /= (4 * num_decks)
+            card_counts[i] /= 4 * num_decks
 
     state.extend(card_counts)
     return np.array(state, dtype=np.float32)
@@ -87,7 +88,11 @@ class BlackjackEnv:
 
         # 返回初始状态
         player_has_usable_ace = self._has_usable_ace(self.player)
-        return encode_state(self.player.calculate_hand_value(), player_has_usable_ace, self.visible_cards)
+        return encode_state(
+            self.player.calculate_hand_value(),
+            player_has_usable_ace,
+            self.visible_cards,
+        )
 
     def _has_usable_ace(self, player):
         """
@@ -100,12 +105,17 @@ class BlackjackEnv:
             布尔值，表示是否有可用的A
         """
         # 计算没有A时的点数
-        non_ace_value = sum(10 if card.rank in ['J', 'Q', 'K'] else
-                            (int(card.rank) if card.rank not in ['A'] else 0)
-                            for card in player.hand)
+        non_ace_value = sum(
+            (
+                10
+                if card.rank in ["J", "Q", "K"]
+                else (int(card.rank) if card.rank not in ["A"] else 0)
+            )
+            for card in player.hand
+        )
 
         # 计算有多少张A
-        num_aces = sum(1 for card in player.hand if card.rank == 'A')
+        num_aces = sum(1 for card in player.hand if card.rank == "A")
 
         # 检查是否有A可以计为11点而不爆牌
         for i in range(num_aces):
@@ -129,13 +139,20 @@ class BlackjackEnv:
             info: 附加信息（空字典）
         """
         if self.done:
-            return encode_state(self.player.calculate_hand_value(),
-                                self._has_usable_ace(self.player),
-                                self.visible_cards), self.reward, self.done, {}
+            return (
+                encode_state(
+                    self.player.calculate_hand_value(),
+                    self._has_usable_ace(self.player),
+                    self.visible_cards,
+                ),
+                self.reward,
+                self.done,
+                {},
+            )
 
-        action_str = 'hit' if action == 0 else 'stand'
+        action_str = "hit" if action == 0 else "stand"
 
-        if action_str == 'hit':
+        if action_str == "hit":
             card = self.deck.deal()
             self.player.add_card(card)
 
@@ -168,16 +185,19 @@ class BlackjackEnv:
 
             # 检查所有对手是否都爆牌
             all_opponents_busted = all(
-                op.calculate_hand_value() > 21 for op in self.opponents)
+                op.calculate_hand_value() > 21 for op in self.opponents
+            )
 
             if all_opponents_busted:  # 所有对手都爆牌
                 self.reward = 1
             else:
                 # 获取没爆牌的对手的最大点数
                 valid_opponents = [
-                    op for op in self.opponents if op.calculate_hand_value() <= 21]
+                    op for op in self.opponents if op.calculate_hand_value() <= 21
+                ]
                 max_opponent_value = max(
-                    [op.calculate_hand_value() for op in valid_opponents])
+                    [op.calculate_hand_value() for op in valid_opponents]
+                )
 
                 if player_value > max_opponent_value:  # 玩家点数最高
                     self.reward = 1
@@ -190,7 +210,10 @@ class BlackjackEnv:
 
         # 构建下一个状态
         player_has_usable_ace = self._has_usable_ace(self.player)
-        next_state = encode_state(self.player.calculate_hand_value(
-        ), player_has_usable_ace, self.visible_cards)
+        next_state = encode_state(
+            self.player.calculate_hand_value(),
+            player_has_usable_ace,
+            self.visible_cards,
+        )
 
         return next_state, self.reward, self.done, {}

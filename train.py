@@ -8,7 +8,7 @@ from blackjack_env import BlackjackEnv
 from dqn_agent import DQNAgent
 
 # Ensure models directory exists
-os.makedirs('models', exist_ok=True)
+os.makedirs("models", exist_ok=True)
 
 
 def train_agent(num_episodes=50000, save_frequency=5000):
@@ -69,10 +69,12 @@ def train_agent(num_episodes=50000, save_frequency=5000):
         # Update progress bar information
         if episode > 0 and episode % 100 == 0:
             avg_reward = np.mean(rewards[-100:])
-            progress_bar.set_postfix({
-                "Avg Reward (Last 100)": f"{avg_reward:.4f}",
-                "Epsilon": f"{agent.epsilon:.4f}"
-            })
+            progress_bar.set_postfix(
+                {
+                    "Avg Reward (Last 100)": f"{avg_reward:.4f}",
+                    "Epsilon": f"{agent.epsilon:.4f}",
+                }
+            )
 
         # Save model periodically
         if (episode + 1) % save_frequency == 0:
@@ -156,32 +158,32 @@ def plot_training_results(rewards, epsilons, window_size=1000):
     # Calculate moving average
     smoothed_rewards = []
     for i in range(len(rewards) - window_size + 1):
-        smoothed_rewards.append(np.mean(rewards[i:i+window_size]))
+        smoothed_rewards.append(np.mean(rewards[i : i + window_size]))
 
     plt.plot(range(window_size, len(rewards) + 1), smoothed_rewards)
-    plt.title(f'Average Reward (Window Size = {window_size})')
-    plt.xlabel('Training Episodes')
-    plt.ylabel('Average Reward')
-    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.title(f"Average Reward (Window Size = {window_size})")
+    plt.xlabel("Training Episodes")
+    plt.ylabel("Average Reward")
+    plt.grid(True, linestyle="--", alpha=0.7)
 
     # Plot raw reward curve
     plt.subplot(3, 1, 2)
     plt.plot(rewards)
-    plt.title('Episode Rewards')
-    plt.xlabel('Training Episodes')
-    plt.ylabel('Reward')
-    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.title("Episode Rewards")
+    plt.xlabel("Training Episodes")
+    plt.ylabel("Reward")
+    plt.grid(True, linestyle="--", alpha=0.7)
 
     # Plot epsilon decay curve
     plt.subplot(3, 1, 3)
     plt.plot(epsilons)
-    plt.title('Exploration Rate (Epsilon) Decay')
-    plt.xlabel('Training Episodes')
-    plt.ylabel('Epsilon')
-    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.title("Exploration Rate (Epsilon) Decay")
+    plt.xlabel("Training Episodes")
+    plt.ylabel("Epsilon")
+    plt.grid(True, linestyle="--", alpha=0.7)
 
     plt.tight_layout()
-    plt.savefig('blackjack_training_results.png', dpi=300)
+    plt.savefig("blackjack_training_results.png", dpi=300)
     print("Chart saved to 'blackjack_training_results.png'")
     plt.show()
 
@@ -211,11 +213,13 @@ if __name__ == "__main__":
     import argparse
 
     # Command line argument parsing
-    parser = argparse.ArgumentParser(description='Train Blackjack AI Agent')
-    parser.add_argument('--episodes', type=int, default=50000,
-                        help='Number of training episodes')
-    parser.add_argument('--eval', type=int, default=1000,
-                        help='Number of evaluation episodes')
+    parser = argparse.ArgumentParser(description="Train Blackjack AI Agent")
+    parser.add_argument(
+        "--episodes", type=int, default=50000, help="Number of training episodes"
+    )
+    parser.add_argument(
+        "--eval", type=int, default=1000, help="Number of evaluation episodes"
+    )
 
     args = parser.parse_args()
 

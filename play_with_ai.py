@@ -8,7 +8,7 @@ from dqn_agent import DQNAgent
 
 def clear_screen():
     """清屏函数"""
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def print_cards(cards):
@@ -26,10 +26,10 @@ def calculate_hand_value(cards):
     aces = 0
 
     for card in cards:
-        if card.rank == 'A':  # Ace
+        if card.rank == "A":  # Ace
             aces += 1
             value += 11
-        elif card.rank in ['J', 'Q', 'K']:  # Face cards
+        elif card.rank in ["J", "Q", "K"]:  # Face cards
             value += 10
         else:
             value += int(card.rank)
@@ -50,11 +50,11 @@ def load_agent(model_path, state_size=15, action_size=2):
     checkpoint = torch.load(model_path)
 
     # 将保存的状态加载到agent中
-    agent.q_network.load_state_dict(checkpoint['q_network'])
-    agent.target_network.load_state_dict(checkpoint['target_network'])
-    agent.optimizer.load_state_dict(checkpoint['optimizer'])
-    agent.epsilon = checkpoint.get('epsilon', 0.0)
-    agent.step = checkpoint.get('step', 0)
+    agent.q_network.load_state_dict(checkpoint["q_network"])
+    agent.target_network.load_state_dict(checkpoint["target_network"])
+    agent.optimizer.load_state_dict(checkpoint["optimizer"])
+    agent.epsilon = checkpoint.get("epsilon", 0.0)
+    agent.step = checkpoint.get("step", 0)
 
     # 设置为评估模式
     agent.q_network.eval()
@@ -107,7 +107,8 @@ def play_with_ai():
             # 显示当前状态
             print(f"庄家的牌: {print_cards([dealer_cards[0]])} ?")
             print(
-                f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})")
+                f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})"
+            )
 
             # 玩家回合
             if calculate_hand_value(player_cards) == 21:
@@ -116,11 +117,11 @@ def play_with_ai():
             else:
                 while True:
                     choice = input("\n您要做什么? (h-要牌, s-停牌): ").lower()
-                    if choice in ['h', 's']:
+                    if choice in ["h", "s"]:
                         break
                     print("无效的选择，请重新输入")
 
-                action = 0 if choice == 'h' else 1
+                action = 0 if choice == "h" else 1
 
             # 执行动作
             next_state, reward, done, _ = env.step(action)
@@ -136,9 +137,11 @@ def play_with_ai():
 
                 # 显示最终状态
                 print(
-                    f"庄家的牌: {print_cards(dealer_cards)} (点数: {calculate_hand_value(dealer_cards)})")
+                    f"庄家的牌: {print_cards(dealer_cards)} (点数: {calculate_hand_value(dealer_cards)})"
+                )
                 print(
-                    f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})")
+                    f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})"
+                )
 
                 # 显示结果
                 if reward == 1:
@@ -153,14 +156,15 @@ def play_with_ai():
 
                 # 询问是否继续
                 continue_playing = input("\n是否继续游戏? (y/n): ").lower()
-                if continue_playing != 'y':
+                if continue_playing != "y":
                     playing = False
                 break
 
             # 显示更新后的玩家牌
             print(f"\n您抽了一张牌...")
             print(
-                f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})")
+                f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})"
+            )
 
             if calculate_hand_value(player_cards) > 21:
                 print("爆牌了！")
@@ -170,21 +174,24 @@ def play_with_ai():
                 clear_screen()
                 print("\n===== 游戏结束 =====")
                 print(
-                    f"庄家的牌: {print_cards(dealer_cards)} (点数: {calculate_hand_value(dealer_cards)})")
+                    f"庄家的牌: {print_cards(dealer_cards)} (点数: {calculate_hand_value(dealer_cards)})"
+                )
                 print(
-                    f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})")
+                    f"您的牌: {print_cards(player_cards)} (点数: {calculate_hand_value(player_cards)})"
+                )
                 print("\n很遗憾，您输了！")
                 losses += 1
 
                 # 询问是否继续
                 continue_playing = input("\n是否继续游戏? (y/n): ").lower()
-                if continue_playing != 'y':
+                if continue_playing != "y":
                     playing = False
 
     print("\n感谢游玩！最终战绩:")
     print(f"{wins}胜 {losses}负 {draws}平")
-    win_rate = wins / (wins + losses + draws) * \
-        100 if (wins + losses + draws) > 0 else 0
+    win_rate = (
+        wins / (wins + losses + draws) * 100 if (wins + losses + draws) > 0 else 0
+    )
     print(f"胜率: {win_rate:.1f}%")
 
 
