@@ -3,9 +3,6 @@ attrs==25.1.0
 backcall==0.2.0
 beautifulsoup4==4.13.3
 bleach==6.2.0
-Brotli @ file:///C:/b/abs_c415aux9ra/croot/brotli-split_1736182803933/work
-certifi @ file:///C:/b/abs_8a944p1_gn/croot/certifi_1738623753421/work/certifi
-charset-normalizer @ file:///croot/charset-normalizer_1721748349566/work
 colorama==0.4.6
 contourpy==1.3.1
 cycler==0.12.1
@@ -15,55 +12,40 @@ docopt==0.6.2
 esper==3.3
 executing==2.2.0
 fastjsonschema==2.21.1
-filelock @ file:///C:/b/abs_f2gie28u58/croot/filelock_1700591233643/work
 fonttools==4.56.0
-gmpy2 @ file:///C:/b/abs_d8ki0o0h97/croot/gmpy2_1738085498525/work
-idna @ file:///C:/b/abs_aad84bnnw5/croot/idna_1714398896795/work
 ipython==8.12.3
 jedi==0.19.2
-Jinja2 @ file:///C:/b/abs_10zs3i4lof/croot/jinja2_1737760123028/work
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 jupyter_client==8.6.3
 jupyter_core==5.7.2
 jupyterlab_pygments==0.3.0
 kiwisolver==1.4.8
-MarkupSafe @ file:///C:/b/abs_a0ma7ge0jc/croot/markupsafe_1738584052792/work
 matplotlib==3.10.1
 matplotlib-inline==0.1.7
 mistune==3.1.2
 mkl-service==2.4.0
-mkl_fft @ file:///C:/Users/dev-admin/mkl/mkl_fft_1730823082242/work
-mkl_random @ file:///C:/Users/dev-admin/mkl/mkl_random_1730822522280/work
-mpmath @ file:///C:/b/abs_7833jrbiox/croot/mpmath_1690848321154/work
 nbclient==0.10.2
 nbconvert==7.16.6
 nbformat==5.10.4
-networkx @ file:///C:/b/abs_b054htfn9t/croot/networkx_1737043671910/work
-numpy @ file:///C:/b/abs_0123vcxhf8/croot/numpy_and_numpy_base_1725470331966/work/dist/numpy-2.0.1-cp311-cp311-win_amd64.whl#sha256=46eb5850478cda64bda6d2f2d3d6ad8ceeb7cc168b83532e4f9dbbcb42e22ab2
 packaging==24.2
 pandocfilters==1.5.1
 parso==0.8.4
 pickleshare==0.7.5
-pillow @ file:///C:/b/abs_b50vowcrzo/croot/pillow_1738010273782/work
 pipreqs==0.5.0
 platformdirs==4.3.6
 prompt_toolkit==3.0.50
 pure_eval==0.2.3
 Pygments==2.19.1
 pyparsing==3.2.1
-PySocks @ file:///C:/ci_311/pysocks_1676425991111/work
 python-dateutil==2.9.0.post0
 pywin32==308
-PyYAML @ file:///C:/b/abs_14xkfs39bx/croot/pyyaml_1728657968772/work
 pyzmq==26.2.1
 referencing==0.36.2
-requests @ file:///C:/b/abs_c3508vg8ez/croot/requests_1731000584867/work
 rpds-py==0.23.1
 six==1.17.0
 soupsieve==2.6
 stack-data==0.6.3
-sympy @ file:///C:/b/abs_b4u17p23yg/croot/sympy_1738108511395/work
 tinycss2==1.4.0
 torch==2.5.1
 torchaudio==2.5.1
@@ -71,9 +53,6 @@ torchvision==0.20.1
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3
-typing_extensions @ file:///C:/b/abs_0ffjxtihug/croot/typing_extensions_1734714875646/work
-urllib3 @ file:///C:/b/abs_7bst06lizn/croot/urllib3_1737133657081/work
 wcwidth==0.2.13
 webencodings==0.5.1
-win-inet-pton @ file:///C:/ci_311/win_inet_pton_1676425458225/work
 yarg==0.1.9
