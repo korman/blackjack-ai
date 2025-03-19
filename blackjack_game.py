@@ -165,7 +165,8 @@ class BlackjackGame:
 
         # 找出点数最高的玩家
         max_value = max(p.calculate_hand_value() for p in valid_players)
-        winners = [p for p in valid_players if p.calculate_hand_value() == max_value]
+        winners = [p for p in valid_players if p.calculate_hand_value()
+                   == max_value]
 
         if len(winners) == 1:
             print(f"\n赢家是 {winners[0].name}，点数: {max_value}")

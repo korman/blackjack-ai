@@ -158,7 +158,7 @@ def plot_training_results(rewards, epsilons, window_size=1000):
     # Calculate moving average
     smoothed_rewards = []
     for i in range(len(rewards) - window_size + 1):
-        smoothed_rewards.append(np.mean(rewards[i : i + window_size]))
+        smoothed_rewards.append(np.mean(rewards[i: i + window_size]))
 
     plt.plot(range(window_size, len(rewards) + 1), smoothed_rewards)
     plt.title(f"Average Reward (Window Size = {window_size})")

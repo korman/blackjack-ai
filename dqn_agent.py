@@ -136,11 +136,13 @@ class DQNAgent:
         # 创建Q网络和目标网络
         self.q_network = DQN(state_size, action_size)
         self.target_network = copy.deepcopy(self.q_network)
-        self.optimizer = optim.Adam(self.q_network.parameters(), lr=self.learning_rate)
+        self.optimizer = optim.Adam(
+            self.q_network.parameters(), lr=self.learning_rate)
         self.loss_fn = nn.MSELoss()
 
         # 设置设备(GPU/CPU)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu")
         self.q_network.to(self.device)
         self.target_network.to(self.device)
 
@@ -150,7 +152,8 @@ class DQNAgent:
             return random.randrange(self.action_size)  # 探索
 
         with torch.no_grad():
-            state_tensor = torch.FloatTensor(state).unsqueeze(0).to(self.device)
+            state_tensor = torch.FloatTensor(
+                state).unsqueeze(0).to(self.device)
             q_values = self.q_network(state_tensor)
             return q_values.argmax().item()  # 利用
 
