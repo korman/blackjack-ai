@@ -190,7 +190,8 @@ def play_with_ai():
     print("\n感谢游玩！最终战绩:")
     print(f"{wins}胜 {losses}负 {draws}平")
     win_rate = (
-        wins / (wins + losses + draws) * 100 if (wins + losses + draws) > 0 else 0
+        wins / (wins + losses + draws) *
+        100 if (wins + losses + draws) > 0 else 0
     )
     print(f"胜率: {win_rate:.1f}%")
 
